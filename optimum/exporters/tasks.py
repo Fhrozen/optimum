@@ -203,7 +203,6 @@ class TasksManager:
         _TRANSFORMERS_TASKS_TO_MODEL_LOADERS = {
             "audio-classification": "AutoModelForAudioClassification",
             "audio-frame-classification": "AutoModelForAudioFrameClassification",
-            "audio-text-to-text": "AutoModelForSeq2SeqLM", 
             "audio-xvector": "AutoModelForAudioXVector",
             "automatic-speech-recognition": ("AutoModelForSpeechSeq2Seq", "AutoModelForCTC"),
             "depth-estimation": "AutoModelForDepthEstimation",
@@ -396,10 +395,6 @@ class TasksManager:
     # Set of model topologies we support associated to the tasks supported by each topology and the factory
     # TODO: remove `-with-past` tasks and rather rely on `variant`.
     _SUPPORTED_MODEL_TYPE = {
-        "qwen2_audio" : supported_tasks_mapping(
-            "audio-text-to-text",
-            "audio-text-to-text-with-past",
-        ),
         "audio-spectrogram-transformer": supported_tasks_mapping(
             "feature-extraction",
             "audio-classification",
