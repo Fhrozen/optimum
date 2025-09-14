@@ -1,4 +1,4 @@
-name: Exporters ONNX CLI / Python - Test
+name: Optimum Pipelines / Python - Test
 
 on:
   push:
@@ -11,6 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  UV_SYSTEM_PYTHON: 1
+  UV_TORCH_BACKEND: auto
   TRANSFORMERS_IS_CI: true
 
 jobs:
@@ -19,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.9]
-        os: [ubuntu-22.04]
+        runs-on: [ubuntu-22.04]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Python ${{ matrix.python-version }}
@@ -34,10 +36,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-          pip install .[tests,exporters] diffusers
+          pip install --upgrade pip uv
+          uv pip install --no-cache-dir optimum-onnx[onnxruntime]@git+https://github.com/huggingface/optimum-onnx.git
+          uv pip install --no-cache-dir .[tests]
 
       - name: Test with pytest
         run: |
-          pytest tests/exporters/onnx/test_export_cli.py -vvvv --durations=0 -n auto
+          pytest tests/pipelines -vvvv --durations=0
