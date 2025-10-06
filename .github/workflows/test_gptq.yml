@@ -22,7 +22,7 @@ jobs:
   test_gptq:
     runs-on:
       group: aws-g6-4xlarge-plus
-
+    if: github.repository == 'huggingface/optimum'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
